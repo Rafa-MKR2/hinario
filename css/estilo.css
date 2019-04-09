@@ -1,0 +1,66 @@
+
+/* fallback fontes do Google */
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(css/font/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+  }
+  
+  .material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+  }
+body{
+    font-size: 17px;
+}
+
+
+#hinos{
+    text-align: center;
+    display: none;
+    
+}
+#numerosHinos{
+    text-align: center;
+    display: none;
+}
+
+#selecaoABC{
+    text-align: center;
+    display: none;
+}
+
+#conteudoSelecionado{
+    text-align: center;
+    position: relative;
+    height:100%;
+   -webkit-touch-callout: none;  /* iPhone OS, Safari */
+   -webkit-user-select: none;    /* Chrome, Safari 3 */
+   -khtml-user-select: none;     /* Safari 2 */
+   -moz-user-select: none;       /* Firefox */
+   -ms-user-select: none;        /* IE10+ */
+   user-select: none;        
+}
+
+.idHino{
+    display: none;
+}
+.naoSelecionavel{
+    display: none;
+    overflow-y: auto;
+    height:100%;
+   
+}
+
