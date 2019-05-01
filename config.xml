@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns="http://www.w3.org/ns/widgets"
+ xmlns:gap="http://phonegap.com/ns/1.0" version="1.0.0" id="hinarioAppVersionRafael">
+
+    <name>Hinário</name>
+    <description>
+    Aplicativo feito sem fins lucrativos, para uso offline
+    </description>
+
+    <author href="https://github.com/Rafa-MKR2"
+    email="rafaeldocarmo2010@gmail.com">
+    Rafael D.Carmo
+    </author>
+</widget>
