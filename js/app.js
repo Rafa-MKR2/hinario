@@ -1,97 +1,126 @@
-$(document).ready(function(){
-    $('#numerosHinos').fadeOut(600) 
-    $('#selecaoABC').fadeOut(600) 
-    var hinos = $('#hinos').html().toString()
-    $('#hinos').fadeOut()
-    $('#conteudoSelecionado').html(hinos)
+/* Hinário — JavaScript da aplicação (sem dependências externas).
+   Exibe os hinos e controla a navegação por número (123) e ordem alfabética (ABC). */
+(function () {
+  'use strict';
 
-  document.querySelector("#selecionaABC").addEventListener('click', function() {
-    $('#hinos').fadeOut(200)
-    $('#numerosHinos').fadeOut(600)
-    $('#conteudoSelecionado').html('')
-    $('#selecaoABC').fadeIn(1200) 
-       
-  })
+  var conteudo = document.getElementById('conteudoSelecionado');
+  var hinosEl = document.getElementById('hinos');
+  var numerosEl = document.getElementById('numerosHinos');
+  var abcEl = document.getElementById('selecaoABC');
 
-  document.querySelector("#seleciona123").addEventListener('click', function() {
-    $('#hinos').fadeOut(600)
-    $('#selecaoABC').fadeOut(600)
-    $('#conteudoSelecionado').html('')
+  // Snapshot dos hinos e índice dos blocos (@NNN@)
+  var todosHinosHtml = hinosEl ? hinosEl.innerHTML : '';
+  var blocos = [];
+  if (hinosEl) {
+    blocos = Array.prototype.slice.call(hinosEl.querySelectorAll('.bloco'));
+  }
 
-    $('#numerosHinos').fadeIn(1200) 
+  function esconder(el) {
+    if (el) { el.classList.add('escondido'); }
+  }
 
-})
+  function mostrar(el) {
+    if (el) { el.classList.remove('escondido'); }
+  }
 
-document.querySelector("#titulo").addEventListener('click', function() {
-   $('#conteudoSelecionado').html('')
-    $('#numerosHinos').fadeOut(600) 
-    $('#selecaoABC').fadeOut(600) 
+  function voltarAoTopo() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      window.scrollTo(0, 0);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
 
-    $('#conteudoSelecionado').html(hinos)
-})
+  function mostrarTodos() {
+    esconder(numerosEl);
+    esconder(abcEl);
+    conteudo.innerHTML = todosHinosHtml;
+    voltarAoTopo();
+  }
 
+  function mostrarGradeNumeros() {
+    conteudo.innerHTML = '';
+    esconder(abcEl);
+    mostrar(numerosEl);
+    voltarAoTopo();
+  }
 
-// função que controla seleção Alfabetica 
-$(function(){ 
-    $(".abcButton").click(function(){
-        var texto = '#myDIV'+$(this).text().replace(/\s/g,'');
+  function mostrarGradeABC() {
+    conteudo.innerHTML = '';
+    esconder(numerosEl);
+    mostrar(abcEl);
+    voltarAoTopo();
+  }
 
-        $('#selecaoABC').fadeOut() 
-        $('#conteudoSelecionado').html('')
-      $(texto).each(function(){
-        $('#conteudoSelecionado').removeClass('naoSelecionavel').html($(this).html());
-    
-    });
-    
-    // Função da lista em ordem alfabetica
-    $(".hinoBtn").click(function(){
-        var seletor = $(this).attr('id')
-        $(".bloco").each(function(){
-          if(seletor===$(this).children().html()) { 
-  
-              $('#conteudoSelecionado').html('')
-              $('#numerosHinos').fadeOut(600) 
-              $('#selecaoABC').fadeOut(600) 
-              $('#conteudoSelecionado').html($(this).html())
+  function mostrarHino(id) {
+    var bloco = null;
+    for (var i = 0; i < blocos.length; i++) {
+      var marcador = blocos[i].querySelector('.idHino');
+      if (marcador && marcador.textContent.trim() === id) {
+        bloco = blocos[i];
+        break;
+      }
+    }
+    if (!bloco) {
+      // Referência órfã no conteúdo original (ex.: @305@ sem bloco): feedback visível
+      conteudo.innerHTML = '<p class="sem-js">Este hino não está disponível neste aplicativo.</p>';
+      return;
+    }
 
-          }
-             
-        }); 
-    
+    esconder(numerosEl);
+    esconder(abcEl);
+    conteudo.innerHTML = '';
+    conteudo.appendChild(bloco.cloneNode(true));
+    voltarAoTopo();
+  }
 
-    })
-
-
-
-      }); 
-      
-    });
-  
-
-// função que controla seleção numericos
-$(function(){ 
-    $(".btnNumber").click(function(){
-      var texto = $(this).text().replace(/\s/g,'');
-
-
-      $(".bloco").each(function(){
-          var id= '@'+texto+'@';
-        if(id===$(this).children().html()) { 
-
-            $('#conteudoSelecionado').html('')
-            $('#numerosHinos').fadeOut(600) 
-            $('#selecaoABC').fadeOut(600) 
-            $('#conteudoSelecionado').html($(this).html())
-
-        }
-           
-      }); 
-  
-    });
-  
+  // Navegação principal
+  document.getElementById('titulo').addEventListener('click', function (e) {
+    e.preventDefault();
+    mostrarTodos();
+  });
+  document.getElementById('seleciona123').addEventListener('click', function (e) {
+    e.preventDefault();
+    mostrarGradeNumeros();
+  });
+  document.getElementById('selecionaABC').addEventListener('click', function (e) {
+    e.preventDefault();
+    mostrarGradeABC();
   });
 
+  // Delegação de cliques — funciona também em conteúdo clonado
+  document.addEventListener('click', function (e) {
+    var alvo = e.target && e.target.closest ? e.target.closest('button') : null;
+    if (!alvo) { return; }
 
+    if (alvo.classList.contains('btnNumber')) {
+      e.preventDefault();
+      mostrarHino('@' + alvo.textContent.trim() + '@');
+      return;
+    }
 
-  // Fim do script
-});
+    if (alvo.classList.contains('abcButton')) {
+      e.preventDefault();
+      var letra = alvo.textContent.trim();
+      var lista = document.getElementById('myDIV' + letra);
+      esconder(abcEl);
+      conteudo.innerHTML = '';
+      if (lista) { conteudo.innerHTML = lista.innerHTML; }
+      voltarAoTopo();
+      return;
+    }
+
+    if (alvo.classList.contains('hinoBtn')) {
+      e.preventDefault();
+      var id = alvo.getAttribute('data-id');
+      if (id === '@Todos@') {
+        mostrarTodos();
+      } else {
+        mostrarHino(id);
+      }
+    }
+  });
+
+  // Estado inicial: mostra todos os hinos
+  mostrarTodos();
+})();

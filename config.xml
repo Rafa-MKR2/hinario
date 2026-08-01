@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <widget xmlns="http://www.w3.org/ns/widgets"
- xmlns:gap="http://phonegap.com/ns/1.0" version="1.0.0" id="hinarioAppVersionRafael">
+ xmlns:gap="http://phonegap.com/ns/1.0" version="2.0.0" id="hinarioAppVersionRafael">
 
     <name>Hinário</name>
     <description>
-    Aplicativo feito sem fins lucrativos, para uso offline
+    Hinário para uso offline: hinos de adoração e louvor, organizados por número e em ordem alfabética. Aplicativo sem fins lucrativos.
     </description>
 
     <author href="https://github.com/Rafa-MKR2"
